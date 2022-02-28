@@ -57,7 +57,11 @@ public abstract class AbstractJournalSystem implements JournalSystem {
     Preconditions.checkState(mRunning, "Journal is not running");
     mAllJournalSinks.forEach(JournalSink::beforeShutdown);
     mRunning = false;
-    stopInternal();
+    try {
+      stopInternal();
+    } catch (Exception e) {
+      LOG.warn("Failed to close journal system properly.");
+    }
   }
 
   @Override
